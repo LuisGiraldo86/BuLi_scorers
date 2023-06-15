@@ -10,7 +10,8 @@ Script to sort the goal scorers according to the total goals scored and the tota
 import pandas as pd
 
 # load data
-df_scorers = pd.read_csv('data/scorer_table.csv')
+SCORERS_PATH='data/scorer_table.csv'
+df_scorers = pd.read_csv(SCORERS_PATH)
 df_scorers
 
 df_scorers['Platz'] = df_scorers['Platz'].apply(lambda x: int(x))
