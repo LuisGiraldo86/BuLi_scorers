@@ -1,6 +1,7 @@
 """
 Author:  LuisG
 Created: January, 2023
+Modified: June, 2023
 
 Python script to web-scrap the goalscorer information from the DFB historic archives
 """
