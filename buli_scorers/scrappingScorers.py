@@ -6,6 +6,7 @@ Python script to web-scrap the goalscorer information from the DFB historic arch
 """
 
 # imports
+import json
 import requests
 import pandas as pd
 import re
@@ -31,7 +32,8 @@ def nation(profil_url):
 # ==============================================================================
 
 # template for url addresses in DFB statistic data base
-ADDRESS = 'https://www.dfb.de/maenner-bundesliga/statistik/rekordtorjaeger/?no_cache=1&spieledb_path=%2Fdatencenter%2F12%2Frekord-torjaeger%2F{}%3Famp%253Bspieledb_path%3D%252Fdatencenter%252F12%252Frekord-torjaeger%252F3%253Fid%253D12%2526t3_remote%253Dtrue%2526t3_uri%253Dhttps%25253A%25252F%25252Fwww.dfb.de%25252Fbundesliga%25252Fstatistik%25252Frekordtorjaeger%25252F%25253Fno_cache%25253D1%26id%3D12%26spieledb_path%3D%252Fdatencenter%252F12%252Frekord-torjaeger%252F2%253Famp%25253Bspieledb_path%253D%25252Fdatencenter%25252F12%25252Frekord-torjaeger%25252F3%25253Fid%25253D12%252526t3_remote%25253Dtrue%252526t3_uri%25253Dhttps%2525253A%2525252F%2525252Fwww.dfb.de%2525252Fbundesliga%2525252Fstatistik%2525252Frekordtorjaeger%2525252F%2525253Fno_cache%2525253D1%2526id%253D12%2526t3_remote%253Dtrue%2526t3_uri%253Dhttps%25253A%25252F%25252Fwww.dfb.de%25252Fmaenner-bundesliga%25252Fstatistik%25252Frekordtorjaeger%25252F%25253Fno_cache%25253D1%26t3_remote%3Dtrue%26t3_uri%3Dhttps%253A%252F%252Fwww.dfb.de%252Fmaenner-bundesliga%252Fstatistik%252Frekordtorjaeger%252F%253Fno_cache%253D1'
+with open('data/addressDFBarchive.json', 'r') as file:
+    ADDRESS = json.load(file)
 
 # first web page with lead scorers
 dfb_urls = ['https://www.dfb.de/bundesliga/statistik/rekordtorjaeger/?no_cache=1']
