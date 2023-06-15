@@ -7,16 +7,17 @@ Python script to web-scrap the goalscorer information from the DFB historic arch
 
 # imports
 import json
-import requests
-import pandas as pd
 import re
+
+import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 
 # =============================
 #    AUXILIARY FUNCTIONS
 # =============================
 
-def nation(profil_url):
+def nation(profil_url:str)->list:
     
     data_profil = requests.get(profil_url).text
     soup_profil = BeautifulSoup(data_profil, 'html.parser')
