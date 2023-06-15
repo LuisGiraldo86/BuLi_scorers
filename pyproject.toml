@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "buli-scorers"
+version = "0.1.0"
+description = ""
+authors = ["Luis Giraldo Gonzalez <luisggon@protonmail.com>"]
+readme = "README.md"
+packages = [{include = "buli_scorers"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
