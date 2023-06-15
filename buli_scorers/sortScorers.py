@@ -12,9 +12,6 @@ import pandas as pd
 # load data
 SCORERS_PATH='data/scorer_table.csv'
 df_scorers = pd.read_csv(SCORERS_PATH)
-df_scorers
-
-df_scorers['Platz'] = df_scorers['Platz'].apply(lambda x: int(x))
 
 # ===================================================
 #                AUXILIARY FUNCTIONS
@@ -22,14 +19,18 @@ df_scorers['Platz'] = df_scorers['Platz'].apply(lambda x: int(x))
 
 def scorer_platz(data: pd.DataFrame)->pd.DataFrame:
 
-    data_ordered = data.sort_values(['Tore', 'Elfmeter'], ascending=[False, False])
+    """Function to determine the goalscorers ranking"""
+
+    data_ordered = data.sort_values(['Tore', 'Elfmeter'], ascending=[False, True])
     platz = 1
 
     for k in range(len(data)):
 
-        data_ordered.iloc[k,0] = platz
+        data_ordered.iloc[k,0] = int(platz)
         if k == len(data)-1: break
         if data_ordered.iloc[k, 2] > data_ordered.iloc[k+1, 2]: platz +=1
+
+    df_scorers['Platz'] = df_scorers['Platz'].astype(int) # to cast as integers
 
     return data_ordered
 
