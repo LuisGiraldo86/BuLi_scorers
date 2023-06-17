@@ -16,3 +16,9 @@ The data was obtained through web scrapping and this task was completed in the P
 It is not difficult to imagina that the data is not clean. We detected two phenomena: there are some players without nationality and, there is no a real ranking. This last assertion is based in the fact that in the raw data many players have no ranking.
 
 Then, we have a second task at hand: cleaning the data.
+
+## Cleaning the historical ranking
+
+The dataset from the DFB archives is not well curated, because not all the players have an assigned ranking, and those who have it appear formated as float.
+
+This problem was easily solved with a Python function in `pandas`.
