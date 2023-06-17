@@ -30,7 +30,7 @@ def scorer_platz(data: pd.DataFrame)->pd.DataFrame:
         if k == len(data)-1: break
         if data_ordered.iloc[k, 2] > data_ordered.iloc[k+1, 2]: platz +=1
 
-    df_scorers['Platz'] = df_scorers['Platz'].astype(int) # to cast as integers
+    data_ordered['Platz'] = data_ordered['Platz'].astype(int) # to cast as integers
 
     return data_ordered
 
