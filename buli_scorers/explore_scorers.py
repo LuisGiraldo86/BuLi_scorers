@@ -19,45 +19,55 @@ df_spielers
 df_spielers.info()
 
 """
-There are 14 players without informantion on its FIFA eligibility
+There are 14 players without informantion on their FIFA eligibility
 """
 mask_null = df_spielers['Nation'].isnull()
 df_spielers[mask_null]
 
-df_spielerNoNation = df_spielers[mask_null]\
+df_NoNation = df_spielers[mask_null]\
     .reset_index(drop=True)\
     .drop(columns=['Nation', 'Nationalelf'])
 
-df_spielersNation = df_spielers[~mask_null].reset_index(drop=True)
-# Pandas load the column with list as a string. We must bring back the list!
-df_spielersNation['Nation'] = df_spielersNation['Nation'].apply(literal_eval)
+df_Nation = df_spielers[~mask_null].reset_index(drop=True)
 
-"""
-Let us fill the missing data by hand
-"""
+# Recall that we had saved the elegibility information as a list of strings
+# and Pandas loaded the column not as a list but as a string.
+# Consequently, we must bring the list back otherwise we will have a problem when we 
+# fill the missing data. 
 
-spieler_ID = df_spielerNoNation['DFB_id'].to_list()
-Nation_lst = [['Deutschland', 'Kroatien'], ['Portugal', 'Guinea-Bissau'], ['Japan'], ['Ghana'], ['Griechenland', 'Deutschland'], ['Norway'], ['Argentinien', 'Italien'], ['Norway'], ['Italien'], ['Senegal', 'Deutschland'], ['Tunesien'], ['Japan'], ['Schweiz', 'Kosovo'], ['Ungarn']]
+df_Nation['Nation'] = df_Nation['Nation'].apply(literal_eval)
 
-Nationalelf_lst = ['Deutschland', 'Portugal', 'Japan', 'Ghana', 'Griechenland', 'Norway', 'Argentina', 'Norway', 'Italien', 'Senegal', 'Tunesien', 'Japan', 'Schweiz', 'Ungarn']
+# Let us fill the missing data by hand
+
+spieler_ID = df_NoNation['DFB_id'].to_list()
+
+Nation_lst = [
+    ['Deutschland', 'Kroatien'], ['Portugal', 'Guinea-Bissau'], ['Japan'], ['Ghana'], 
+    ['Griechenland', 'Deutschland'], ['Norway'], ['Argentinien', 'Italien'], ['Norway'], ['Italien'], ['Senegal', 'Deutschland'], ['Tunesien'], ['Japan'], ['Schweiz', 'Kosovo'], ['Ungarn']
+]
+
+Nationalelf_lst = [
+    'Deutschland', 'Portugal', 'Japan', 'Ghana', 'Griechenland', 'Norway', 'Argentina', 'Norway', 'Italien', 'Senegal', 'Tunesien', 'Japan', 'Schweiz', 'Ungarn'
+]
 
 df_toFill = pd.DataFrame({'DFB_id': spieler_ID, 'Nation': Nation_lst, 'Nationalelf': Nationalelf_lst})
 
-df_spielerNoNation = df_spielerNoNation.merge(df_toFill, on='DFB_id')
+df_NoNation = df_NoNation.merge(df_toFill, on='DFB_id')
 
-df_spielers = pd.concat([df_spielerNoNation, df_spielersNation], axis=0)\
+df_spielers = pd.concat([df_NoNation, df_Nation], axis=0)\
     .sort_values(by='DFB_id').reset_index(drop=True)
 
-df_spielers['choices'] = df_spielers['Nation'].apply(
-    lambda x: len(x)
-)
+df_spielers['num_choices'] = df_spielers['Nation']\
+    .apply(lambda x: len(x))
 
-pd.set_option('display.max_columns', None)
-df_multi = df_spielers[df_spielers['choices']>1]
 
-df_multi = df_multi.drop(columns=['DFB_id', 'link', 'choices'], inplace=False)
+mask_choices = df_spielers['num_choices']>1
+df_elegibles = df_spielers[mask_choices] # in this case we want to keep the indices
 
-"""with a careful analysis there are some incongruences with respect to Transfermarkt data
+df_elegibles.drop(columns=['DFB_id', 'link', 'choices'], inplace=True)
+
+"""
+with a careful analysis there are some incongruences with respect to Transfermarkt data
 
 76	 | Roman Neustädter	| ['Deutschland', 'Russland']	                    | Russland
 567	 | Raúl Bobadilla	| ['Argentinien', 'Paraguay']	                    | Paraguay
@@ -66,6 +76,7 @@ df_multi = df_multi.drop(columns=['DFB_id', 'link', 'choices'], inplace=False)
 
 """
 
+# fixing the errors
 df_spielers.iloc[76, 4] = 'Russland'
 df_spielers.iloc[567, 4] = 'Paraguay'
 df_spielers.iloc[638, 4] = 'Ungarn'
